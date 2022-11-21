@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+hi user index
+
+<form action="{% url 'user_index' %}" method="post">
+    {% csrf_token %}
+    {{user_form.as_p}}
+    {{user_profile_form.as_p}}
+    <input type="submit" value="Submit">
+</form>
+
+
+
+
+{% endblock %}

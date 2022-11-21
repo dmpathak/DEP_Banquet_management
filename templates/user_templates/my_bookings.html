@@ -1,0 +1,74 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'add_booking' %}"><button class="btn-primary">Add New</button></a>
+
+<table class="table">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">user</th>
+        <th scope="col">customer</th>
+        <th scope="col">rooms</th>
+        <th scope="col">extra_service</th>
+        <th scope="col">CheckInDate</th>
+        <th scope="col">CheckOutDate</th>
+        <th scope="col">Edit Booking</th>
+        <th scope="col">Cancel Booking</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for booking_data in page_obj %}
+    <tr>
+        <th scope="row">{{booking_data.id}}</th>
+        <td>{{booking_data.user.username}}</td>
+        <td>{{booking_data.customer.customer_name}}</td>
+        <td>
+            {% for each_room in booking_data.rooms.all %}
+            {{each_room.room_name}},
+            {% endfor %}
+        </td>
+        <td>
+            {% for extra_service in booking_data.extra_service.all %}
+            {{extra_service.service_name}},
+            {% endfor %}</td>
+        <td>{{booking_data.CheckInDate}}</td>
+        <td>{{booking_data.CheckOutDate}}</td>
+        <td><a href="{% url 'update_booking' booking_data.id %}"><button class="btn-primary">Edit</button></a></td>
+        <td><a href="{% url 'delete_booking' booking_data.id %}"><button class="btn-primary">Cancel</button></a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="d-flex justify-content-center align-items-center g-2">
+    {{page_obj}}
+
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination  justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+
+{% endblock %}

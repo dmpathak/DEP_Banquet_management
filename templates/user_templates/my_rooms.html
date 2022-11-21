@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<a href="{% url 'add_rooms' %}"><button class="btn-primary">Add New</button></a>
+
+<table class="table">
+    <thead class="table-dark">
+    <tr>
+        <th scope="col">Id</th>
+        <th scope="col">Name</th>
+        <th scope="col">Room Status</th>
+        <th scope="col">Room Type</th>
+        <th scope="col">Edit</th>
+        <th scope="col">Delete</th>
+    </tr>
+    </thead>
+    <tbody>
+    {% for room_data in page_obj %}
+    <tr>
+        <th scope="row">{{room_data.id}}</th>
+        <td>{{room_data.room_name}}</td>
+        <td>{{room_data.room_status}}</td>
+        <td>{{room_data.room_type}}</td>
+        <td><a href="{% url 'update_room' room_data.id %}"><button class="btn-primary">Edit</button></a></td>
+        <td><a href="{% url 'delete_room' room_data.id %}"><button class="btn-primary">Delete</button></a></td>
+    </tr>
+    {% endfor %}
+    </tbody>
+</table>
+<div class="d-flex justify-content-center align-items-center g-2">
+    {{page_obj}}
+
+    {% if page_obj.has_other_pages %}
+    <nav aria-label="Page navigation example">
+        <ul class="pagination  justify-content-center">
+            {% if page_obj.has_previous %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">&laquo;</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&laquo;</span></li>
+            {% endif %}
+            {% for i in page_obj.paginator.page_range %}
+            {% if page_obj.number == i %}
+            <li class="page-item active"><span class="page-link">{{ i }} <span class="sr-only">(current)</span></span>
+            </li>
+            {% else %}
+            <li class="page-item"><a class="page-link" href="?page={{ i }}">{{ i }}</a></li>
+            {% endif %}
+            {% endfor %}
+            {% if page_obj.has_next %}
+            <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">&raquo;</a></li>
+            {% else %}
+            <li class="page-item disabled"><span class="page-link">&raquo;</span></li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+</div>
+
+
+{% endblock %}
